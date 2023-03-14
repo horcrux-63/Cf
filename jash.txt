@@ -1,0 +1,111 @@
+//Glorify the name of your lord
+#include<bits/stdc++.h>
+using namespace std;
+#define      PI                    2*acos(0)
+#define      ll                    long long
+#define      pii                   pair<int,int>
+#define      nline                 "\n"
+#define      Min_Heap              priority_queue<int, vector<int>, greater<int>>
+#define      forr(arr)             for (auto &x : (arr))
+#define      all(x)                (x).begin(), (x).end()
+#define      rall(x)               (x).rbegin(), (x).rend()
+#define      gcd(x, y)             __gcd(x, y)
+#define      lcm(x, y)             x *(y / gcd(x, y))
+#define      MAX                   2000010
+#define      MOD                   1000000007
+#define      RunFast               ios::sync_with_stdio (0); cin.tie(0);
+
+/*.......................................................................................................................*/
+ll expo(ll a, ll b, ll mod) {ll res = 1; while (b > 0) {if (b & 1)res = (res * a) % mod; a = (a * a) % mod; b = b >> 1;} return res;}
+ll mminvprime(ll a, ll b) {return expo(a, b - 2, b);}
+ll mod_add(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a + b) % m) + m) % m;}
+ll mod_mul(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a * b) % m) + m) % m;}
+ll mod_sub(ll a, ll b, ll m) {a = a % m; b = b % m; return (((a - b) % m) + m) % m;}
+ll mod_div(ll a, ll b, ll m) {a = a % m; b = b % m; return (mod_mul(a, mminvprime(b, m), m) + m) % m;}  //only for prime m
+/*.......................................................................................................................*/
+
+vector<bool> is_prime(1e7, true);
+set<int>primes;
+void sieve()
+{
+    is_prime[0] = is_prime[1] = false;
+    for (ll i = 2; i * i <= 1e5; i++) {
+        if (is_prime[i]) {
+            for (int j = i * i; j <= 1e5; j += i)
+                is_prime[j] = false;
+        }
+    }
+    for (int i = 0; i <= 1e5; i++) {
+        if (is_prime[i]) {
+            primes.insert(i);
+        }
+    }
+}
+
+
+void run_test_case() {
+    ll n; cin >> n;
+    vector<int>a(n);
+    ll sum = 0;
+    for (auto& cc : a) {
+        cin >> cc;
+        sum += cc;
+    }
+    if (primes.find(sum) == primes.end()) {
+        cout << n << nline;
+        for (int i = 0; i < n; i++)
+            cout << i + 1 << " ";
+        cout << nline;
+        return;
+    }
+    ll mx = -1;
+    int f1 = 0, f2 = 0;
+    ll sum1 = 0, pos = -1;
+    for (int i = 0; i < n; i++) {
+        sum1 += a[i];
+        if (primes.find(sum1) == primes.end()) {
+            if (i + 1 > mx) {
+                mx = i + 1;
+                f1 = 1, f2 = 0;
+            }
+        }
+        if (primes.find(sum - sum1) == primes.end()) {
+            if (n - i - 1 > mx) {
+                mx = n - i - 1;
+                pos = i + 2;
+                f2 = 1, f1 = 0;
+            }
+        }
+    }
+    cout << mx << nline;
+    if (f1) {
+        for (int i = 1; i <= mx; i++) {
+            cout << i << " ";
+        }
+    } else {
+        for (int i = pos; i <= n; i++) {
+            cout << i << " ";
+        }
+    }
+    cout << nline;
+}
+int main()
+{
+#ifndef ONLINE_JUDGE
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+#endif
+    RunFast
+
+    ll tc = 1;
+    cin >> tc;
+    sieve();
+    while (tc--)
+    {
+        run_test_case();
+        //return 0 ;
+
+    }
+
+
+}
